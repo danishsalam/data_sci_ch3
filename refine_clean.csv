@@ -1,0 +1,26 @@
+"","company","company_akzo","company_philips","company_van_houten","company_unilever"
+"1","philips",FALSE,TRUE,FALSE,FALSE
+"2","philips",FALSE,TRUE,FALSE,FALSE
+"3","philips",FALSE,TRUE,FALSE,FALSE
+"4","philips",FALSE,TRUE,FALSE,FALSE
+"5","philips",FALSE,TRUE,FALSE,FALSE
+"6","philips",FALSE,TRUE,FALSE,FALSE
+"7","akzo",TRUE,FALSE,FALSE,FALSE
+"8","akzo",TRUE,FALSE,FALSE,FALSE
+"9","akzo",TRUE,FALSE,FALSE,FALSE
+"10","akzo",TRUE,FALSE,FALSE,FALSE
+"11","akzo",TRUE,FALSE,FALSE,FALSE
+"12","akzo",TRUE,FALSE,FALSE,FALSE
+"13","akzo",TRUE,FALSE,FALSE,FALSE
+"14","philips",FALSE,TRUE,FALSE,FALSE
+"15","philips",FALSE,TRUE,FALSE,FALSE
+"16","philips",FALSE,TRUE,FALSE,FALSE
+"17","van houten",FALSE,FALSE,TRUE,FALSE
+"18","van houten",FALSE,FALSE,TRUE,FALSE
+"19","van houten",FALSE,FALSE,TRUE,FALSE
+"20","van houten",FALSE,FALSE,TRUE,FALSE
+"21","van houten",FALSE,FALSE,TRUE,FALSE
+"22","unilever",FALSE,FALSE,FALSE,TRUE
+"23","unilever",FALSE,FALSE,FALSE,TRUE
+"24","unilever",FALSE,FALSE,FALSE,TRUE
+"25","unilever",FALSE,FALSE,FALSE,TRUE

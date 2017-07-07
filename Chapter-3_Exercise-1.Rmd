@@ -1,0 +1,101 @@
+---
+title: "Chapter-3 Exercise-1"
+author: "Danish Salam"
+date: "July 7, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data Wrangling- Exercise#1
+
+This document contains the tasks which are requsted in execrise#1 in chapter#3.
+
+### Load the data in RStudio
+Save the data set as a CSV file called refine_original.csv and load it in RStudio into a data frame.
+
+```{r message = FALSE}
+#load library
+library(dplyr)
+library(tidyr)
+
+#load refine csv and hold it in local data frame.
+org_df = read.csv("refine_original.csv")
+df <- tbl_df(org_df)
+```
+
+
+###Task # 1: Clean up brand names
+
+Clean up the 'company' column so all of the misspellings of the brand names are standardized. For example, you can transform the values in the column to be: philips, akzo, van houten and unilever (all lowercase).
+
+```{r df}
+df$company <-gsub("\\w+ps$", "philips", df$company, ignore.case = TRUE)
+df$company <-gsub("^ak\\s*\\w+", "akzo", df$company, ignore.case = TRUE)
+df$company <-gsub("^van\\s\\w+", "van houten", df$company, ignore.case = TRUE)
+df$company <-gsub("^un\\w+", "unilever", df$company, ignore.case = TRUE)
+
+#unique company name list
+df %>% select(company) %>% unique()
+```
+
+###Task#2: Separate product code and number
+
+Separate the product code and product number into separate columns i.e. add two new columns called product_code and product_number, containing the product code and number respectively
+
+```{r}
+#split the code number column into two columns prodcut code and number respectively.
+df <- df %>%
+  separate(Product.code...number, c("ProductCode", "ProductNumber"), "-")
+df %>% select(ProductCode, ProductNumber) %>% unique()
+```
+
+###Task#3: Add product categories
+
+```{r}
+#add a new column product category. Product category will be identified by this product code.
+df <- df %>% 
+  mutate(category = case_when(
+    .$ProductCode=="p" ~ "Smartphone",
+    .$ProductCode=="v" ~ "TV",
+    .$ProductCode=="x" ~ "Laptop",
+    .$ProductCode=="q" ~ "Tablet"
+  ))
+
+#unique prodcut category list
+df %>% select(category) %>% unique()
+
+```
+
+###Task#4: Add full address for geocoding
+
+```{r}
+
+df <-df %>% 
+  mutate(full_address = paste(address, city, country, sep = ', '))
+df %>% 
+  select(full_address) %>% distinct
+```
+
+###Task#5: Create dummy variables for company and product category
+
+```{r}
+df <- df %>% 
+  mutate(company_philips = if_else(company=="philips", 1, 0)) %>% 
+  mutate(company_akzo = if_else(company=="akzo", 1, 0)) %>% 
+  mutate(company_van_houten = if_else(company=="van houten", 1, 0)) %>% 
+  mutate(company_unilever = if_else(company=="unilever", 1, 0)) %>% 
+  mutate_at(vars(starts_with("company_")),funs(as.logical)) %>%
+  select(company, company_akzo, company_philips, company_van_houten, company_unilever)
+df
+```
+
+###Task#6: Submit the project on Github
+
+```{r}
+write.csv(df, file = "refine_clean.csv")
+```
+
+
