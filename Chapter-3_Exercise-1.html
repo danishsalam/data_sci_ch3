@@ -125,10 +125,10 @@ $(document).ready(function () {
 
 <div id="data-wrangling--exercise1" class="section level2">
 <h2>Data Wrangling- Exercise#1</h2>
-<p>This document contains the tasks which are requsted in execrise#1 in chapter#3.</p>
+<p>This document contains the tasks which are requested in exercise#1 in chapter#3.</p>
 <div id="load-the-data-in-rstudio" class="section level3">
 <h3>Load the data in RStudio</h3>
-<p>Save the data set as a CSV file called refine_original.csv and load it in RStudio into a data frame.</p>
+<p>Save the data set as a CSV file called refine_original.csv and load it in R Studio into a data frame.</p>
 <pre class="r"><code>#load library
 library(dplyr)</code></pre>
 <pre><code>## Warning: package 'dplyr' was built under R version 3.4.1</code></pre>
@@ -180,6 +180,12 @@ df %&gt;% select(ProductCode, ProductNumber) %&gt;% unique()</code></pre>
 </div>
 <div id="task3-add-product-categories" class="section level3">
 <h3>Task#3: Add product categories</h3>
+<p>You learn that the product codes actually represent the following product categories:</p>
+<pre><code>p = Smartphone
+v = TV
+x = Laptop
+q = Tablet</code></pre>
+<p>In order to make the data more readable, add a column with the product category for each record.</p>
 <pre class="r"><code>#add a new column product category. Product category will be identified by this product code.
 df &lt;- df %&gt;% 
   mutate(category = case_when(
@@ -201,6 +207,7 @@ df %&gt;% select(category) %&gt;% unique()</code></pre>
 </div>
 <div id="task4-add-full-address-for-geocoding" class="section level3">
 <h3>Task#4: Add full address for geocoding</h3>
+<p>You’d like to view the customer information on a map. In order to do that, the addresses need to be in a form that can be easily geocoded. Create a new column full_address that concatenates the three address fields (address, city, country), separated by commas.</p>
 <pre class="r"><code>df &lt;-df %&gt;% 
   mutate(full_address = paste(address, city, country, sep = ', '))
 df %&gt;% 
@@ -222,31 +229,44 @@ df %&gt;%
 </div>
 <div id="task5-create-dummy-variables-for-company-and-product-category" class="section level3">
 <h3>Task#5: Create dummy variables for company and product category</h3>
+<p>Both the company name and product category are categorical variables i.e. they take only a fixed set of values. In order to use them in further analysis you need to create dummy variables. Create dummy binary variables for each of them with the prefix company_ and product_ i.e.,</p>
+<pre><code>Add four binary (1 or 0) columns for company: company_philips, company_akzo, company_van_houten and company_unilever.
+
+Add four binary (1 or 0) columns for product category: product_smartphone, product_tv, product_laptop and product_tablet.</code></pre>
 <pre class="r"><code>df &lt;- df %&gt;% 
   mutate(company_philips = if_else(company==&quot;philips&quot;, 1, 0)) %&gt;% 
   mutate(company_akzo = if_else(company==&quot;akzo&quot;, 1, 0)) %&gt;% 
   mutate(company_van_houten = if_else(company==&quot;van houten&quot;, 1, 0)) %&gt;% 
   mutate(company_unilever = if_else(company==&quot;unilever&quot;, 1, 0)) %&gt;% 
-  mutate_at(vars(starts_with(&quot;company_&quot;)),funs(as.logical)) %&gt;%
-  select(company, company_akzo, company_philips, company_van_houten, company_unilever)
+  mutate(product_smartphone = if_else(ProductCode==&quot;p&quot;, 1, 0)) %&gt;% 
+  mutate(product_tv = if_else(ProductCode==&quot;v&quot;, 1, 0)) %&gt;% 
+  mutate(product_laptop = if_else(ProductCode==&quot;x&quot;, 1, 0)) %&gt;% 
+  mutate(product_tablet = if_else(ProductCode==&quot;q&quot;, 1, 0)) %&gt;% 
+  mutate_at(vars(matches(&quot;company_|product_&quot;)),funs(as.logical))
+  
 df</code></pre>
-<pre><code>## # A tibble: 25 x 5
-##    company company_akzo company_philips company_van_houten
-##      &lt;chr&gt;        &lt;lgl&gt;           &lt;lgl&gt;              &lt;lgl&gt;
-##  1 philips        FALSE            TRUE              FALSE
-##  2 philips        FALSE            TRUE              FALSE
-##  3 philips        FALSE            TRUE              FALSE
-##  4 philips        FALSE            TRUE              FALSE
-##  5 philips        FALSE            TRUE              FALSE
-##  6 philips        FALSE            TRUE              FALSE
-##  7    akzo         TRUE           FALSE              FALSE
-##  8    akzo         TRUE           FALSE              FALSE
-##  9    akzo         TRUE           FALSE              FALSE
-## 10    akzo         TRUE           FALSE              FALSE
-## # ... with 15 more rows, and 1 more variables: company_unilever &lt;lgl&gt;</code></pre>
+<pre><code>## # A tibble: 25 x 17
+##    company ProductCode ProductNumber             address   city
+##      &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;              &lt;fctr&gt; &lt;fctr&gt;
+##  1 philips           p             5 Groningensingel 147 arnhem
+##  2 philips           p            43 Groningensingel 148 arnhem
+##  3 philips           x             3 Groningensingel 149 arnhem
+##  4 philips           x            34 Groningensingel 150 arnhem
+##  5 philips           x            12 Groningensingel 151 arnhem
+##  6 philips           p            23 Groningensingel 152 arnhem
+##  7    akzo           v            43   Leeuwardenweg 178 arnhem
+##  8    akzo           v            12   Leeuwardenweg 179 arnhem
+##  9    akzo           x             5   Leeuwardenweg 180 arnhem
+## 10    akzo           p            34   Leeuwardenweg 181 arnhem
+## # ... with 15 more rows, and 12 more variables: country &lt;fctr&gt;,
+## #   name &lt;fctr&gt;, category &lt;chr&gt;, full_address &lt;chr&gt;,
+## #   company_philips &lt;lgl&gt;, company_akzo &lt;lgl&gt;, company_van_houten &lt;lgl&gt;,
+## #   company_unilever &lt;lgl&gt;, product_smartphone &lt;lgl&gt;, product_tv &lt;lgl&gt;,
+## #   product_laptop &lt;lgl&gt;, product_tablet &lt;lgl&gt;</code></pre>
 </div>
 <div id="task6-submit-the-project-on-github" class="section level3">
 <h3>Task#6: Submit the project on Github</h3>
+<p>nclude your code, the original data as a CSV file refine_original.csv, and the cleaned up data as a CSV file called refine_clean.csv.</p>
 <pre class="r"><code>write.csv(df, file = &quot;refine_clean.csv&quot;)</code></pre>
 </div>
 </div>
