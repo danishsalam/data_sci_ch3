@@ -27,14 +27,18 @@ df <-df %>%
   mutate(full_address = paste(address, city, country, sep = ', '))
 
 #task-5
-df %>% 
+df <- df %>% 
   mutate(company_philips = if_else(company=="philips", 1, 0)) %>% 
   mutate(company_akzo = if_else(company=="akzo", 1, 0)) %>% 
   mutate(company_van_houten = if_else(company=="van houten", 1, 0)) %>% 
   mutate(company_unilever = if_else(company=="unilever", 1, 0)) %>% 
-  mutate_at(vars(starts_with("company_")),funs(as.logical)) %>%
-  select(company, company_akzo, company_philips, company_van_houten, company_unilever)
-  
+  mutate(product_smartphone = if_else(ProductCode=="p", 1, 0)) %>% 
+  mutate(product_tv = if_else(ProductCode=="v", 1, 0)) %>% 
+  mutate(product_laptop = if_else(ProductCode=="x", 1, 0)) %>% 
+  mutate(product_tablet = if_else(ProductCode=="q", 1, 0)) %>% 
+  mutate_at(vars(matches("company_|product_")),funs(as.logical))
+
+df
 
 df <- data.frame(x = c("a", "a b", "a b c", NA))
 df %>% select(x) %>% filter(x=="a")

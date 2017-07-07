@@ -1,0 +1,76 @@
+---
+title: "Data Wrangling- Exercise#2"
+author: "Danish Salam"
+date: "July 7, 2017"
+output: html_document
+---
+## Data Wrangling- Exercise#2
+
+This document contains the tasks which are requested in exercise#2 in chapter#3.
+
+### Load the data in RStudio
+Save the data set as a CSV file called titanic_original.csv and load it in R Studio into a data frame.
+
+```{r message = FALSE}
+#load library
+library(dplyr)
+library(tidyr)
+
+#load refine csv and hold it in local data frame.
+org_df = read.csv("titanic_original.csv")
+df <- tbl_df(org_df)
+```
+
+### Task #1: Port of embarkation
+
+The embarked column has some missing values, which are known to correspond to passengers who actually embarked at Southampton. Find the missing values and replace them with S. (Caution: Sometimes a missing value might be read into R as a blank or empty string.)
+
+```{r df}
+df <- df %>% 
+  mutate(embarked = gsub("^$", "S", embarked))
+
+#unique company name list
+df %>% select(embarked) %>% unique()
+```
+
+### Task #2: Age
+
+Calculate the mean of the Age column and use that value to populate the missing values.
+
+```{r}
+df <- df %>% 
+  mutate(age = if_else(is.na(age), mean(df$age, na.rm=TRUE), age))
+df %>% select(age) %>% unique()
+```
+
+### Task #3: Lifeboat
+Fill these empty slots with a dummy value e.g. the string 'NA'.
+
+```{r}
+df <- df %>% 
+  mutate(boat = gsub("^$", "NA", boat))
+
+#unique boat list
+df %>% select(boat) %>% unique()
+
+```
+
+### Task #4: Cabin
+Create a new column has_cabin_number which has 1 if there is a cabin number, and 0 otherwise.
+
+```{r}
+df <- df %>% 
+  mutate(as_cabin_number = if_else(grepl("^$", cabin), 0, 1))
+
+df %>% 
+  select(as_cabin_number) %>% distinct
+```
+
+### Task #6: Submit the project on Github
+Include your code, the original data as a CSV file titanic_original.csv, and the cleaned up data as a CSV file called titanic_clean.csv.
+
+```{r}
+write.csv(df, file = "titanic_clean.csv")
+```
+
+
