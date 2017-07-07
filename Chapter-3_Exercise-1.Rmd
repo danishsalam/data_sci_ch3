@@ -27,7 +27,7 @@ df <- tbl_df(org_df)
 ```
 
 
-###Task # 1: Clean up brand names
+### Task # 1: Clean up brand names
 
 Clean up the 'company' column so all of the misspellings of the brand names are standardized. For example, you can transform the values in the column to be: philips, akzo, van houten and unilever (all lowercase).
 
@@ -41,7 +41,7 @@ df$company <-gsub("^un\\w+", "unilever", df$company, ignore.case = TRUE)
 df %>% select(company) %>% unique()
 ```
 
-###Task#2: Separate product code and number
+### Task#2: Separate product code and number
 
 Separate the product code and product number into separate columns i.e. add two new columns called product_code and product_number, containing the product code and number respectively
 
@@ -52,7 +52,7 @@ df <- df %>%
 df %>% select(ProductCode, ProductNumber) %>% unique()
 ```
 
-###Task#3: Add product categories
+### Task#3: Add product categories
 
 ```{r}
 #add a new column product category. Product category will be identified by this product code.
@@ -69,7 +69,7 @@ df %>% select(category) %>% unique()
 
 ```
 
-###Task#4: Add full address for geocoding
+### Task#4: Add full address for geocoding
 
 ```{r}
 
@@ -79,7 +79,7 @@ df %>%
   select(full_address) %>% distinct
 ```
 
-###Task#5: Create dummy variables for company and product category
+### Task#5: Create dummy variables for company and product category
 
 ```{r}
 df <- df %>% 
@@ -92,7 +92,7 @@ df <- df %>%
 df
 ```
 
-###Task#6: Submit the project on Github
+### Task#6: Submit the project on Github
 
 ```{r}
 write.csv(df, file = "refine_clean.csv")
